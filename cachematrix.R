@@ -10,7 +10,7 @@ makeCacheMatrix <- function(x = matrix()) {
     inv <<- NULL; # reset inverse as well
   }
   get <- function() x;
-  setinv <- function(inverse) inv <<- inverse;
+  setinv <- function(new_inv) inv <<- new_inv;
   getinv <- function() inv;
   list(
     set = set,
@@ -20,20 +20,18 @@ makeCacheMatrix <- function(x = matrix()) {
   );
 }
 
-
-
 cacheSolve <- function(x, ...) {
   ## return inverse of matrix, from cache or calc to cache
   inv <- x$getinv();
   if (is.null(inv) == FALSE) {
     # there is a cached one, serve up that
-    message("retrieving from cache");
+    message("already cached, retrieving.");
     return(inv);
   }else{
     #one needs to be computed and cached for future calls
-    data <- x$get();
-    inv <- solve(data);
-    x$setinverse(inv);
+    mtrx <- x$get();
+    inv <- solve(mtrx);
+    x$setinv(inv);
     return(inv);
   }
 }
